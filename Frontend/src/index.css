@@ -9,6 +9,8 @@
   --background: #FEFEFE;
   --border-gray: #ccc;
   --error-background: #ffe6e6;
+  --border-color: #ddd;
+  --background-secondary: #f8f7f7;
 }
 html, body, #root{ 
   margin:0;

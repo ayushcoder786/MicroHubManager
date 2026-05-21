@@ -105,6 +105,14 @@ const App = () => {
     function signupResponseHandler(res){
         alert(res.message);
         setIsProgress(false);
+        setSignupData({
+            fullname: "",
+            phone: "",
+            email: "",
+            password: "",
+            retypepassword: ""
+        });
+        finput.current?.focus();
     }
 
     return (
