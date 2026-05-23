@@ -187,7 +187,7 @@ const UserManager = ({logout}) => {
                         <label>Phone Number*</label>
                         <input type='text' className={errorData?.phone ? 'error' : ''} autoComplete='off' name='phone' value={userData?.phone} onChange={(e)=>handleInput(e)} />
                         <label>Role*</label>
-                        <select className={errorData?.role ? 'error' : ''} disabled={userData?.id === ""} name='role' value={userData?.role} onChange={(e)=>handleInput(e)}>
+                        <select className={errorData?.role ? 'error' : ''} disabled={userData?.id !== ""} name='role' value={userData?.role} onChange={(e)=>handleInput(e)}>
                             {rolesData?.map((r)=>(
                                 <option value={r.role}>{r.rolename}</option>
                             ))}

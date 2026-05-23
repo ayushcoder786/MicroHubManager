@@ -11,7 +11,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import mth.models.Roles;
 import mth.models.Users;
+import mth.repository.RoleRepository;
 import mth.repository.UsersRepository;
 
 @Service
@@ -21,6 +23,9 @@ public class UsersService {
 
 	@Autowired
 	JwtService JWT;
+	
+	@Autowired
+	RoleRepository RR;
 
 	public Object signup(Users U) {
 		Map<String, Object> response = new HashMap<>();
@@ -103,13 +108,54 @@ public class UsersService {
 			JWT.validateJWT(token);
 			Pageable pageable = PageRequest.of(page - 1, size);
 			Page<Users> users = UR.findAll(pageable);
+			
+			List<Roles> roles = RR.findAll();
 
 			response.put("code", 200);
 			response.put("page", page);
 			response.put("size", size);
 			response.put("totalpages", users.getTotalPages());
 			response.put("users", users.getContent());
+			response.put("roles", roles);
 		} catch (Exception e) {
+			response.put("code", 500);
+			response.put("message", e.getMessage());
+		}
+		return response;
+	}
+	
+	public Object saveUser(Users U, String token)
+	{
+		Map<String, Object> response = new HashMap<>();
+		try {
+			JWT.validateJWT(token);
+			Object id = UR.checkByEmail(U.getEmail());
+			if(id!=null)
+				throw new Exception("Email ID already regitered");
+			UR.save(U);
+			response.put("code",200);
+			response.put("message","New User Account has been created");
+		}
+		catch(Exception e)
+		{
+			response.put("code", 500);
+			response.put("message", e.getMessage());
+		}
+		return response;
+	}
+	
+	public Object deleteUser(Long id,String token)
+	{
+		Map<String, Object> response = new HashMap<>();
+		try
+		{
+			JWT.validateJWT(token);
+			UR.deleteById(id);
+			response.put("code", 200);
+			response.put("message", "User has been deleted");
+		}
+		catch(Exception e)
+		{
 			response.put("code", 500);
 			response.put("message", e.getMessage());
 		}
